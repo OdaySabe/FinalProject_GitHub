@@ -20,8 +20,16 @@ class SignIn extends Component {
     this.setState({ password: event.target.value });
   };
   SignIn = () => {
-    this.props.SignIn(this.state.userName, this.state.password);
-    this.setState({ redirect: true });
+    this.props
+      .SignIn(this.state.userName, this.state.password)
+      .then((result) => {
+        if (result.data.err) {
+          alert(result.data.err);
+        } else {
+          this.props.loggedUser();
+          this.setState({ redirect: true });
+        }
+      });
   };
   render() {
     if (this.state.redirect) {
@@ -37,7 +45,6 @@ class SignIn extends Component {
               Home
             </Link>
           </div>
-
           <table className="table">
             Log In
             <tr>

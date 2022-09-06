@@ -15,5 +15,6 @@ const allCitiesSechama = new Schema({
     },
   },
 });
+
 const allCities = mongoose.model("CITIES", allCitiesSechama);
 module.exports = allCities;

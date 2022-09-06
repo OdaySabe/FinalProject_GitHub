@@ -7,7 +7,7 @@ export default class HomePage extends Component {
 
     return (
       <div>
-        <Navbar filteredCities={this.props.filteredCities} searchCity={this.props.searchCity}   filterContinent={this.props.filterContinent} />    
+        <Navbar LoggedUser={this.props.LoggedUser} filteredCities={this.props.filteredCities} searchCity={this.props.searchCity}   filterContinent={this.props.filterContinent} />    
            <Image  Images={this.props.citiesInfo}/> ;
       </div>
     );

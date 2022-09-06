@@ -6,12 +6,17 @@ import City from "./componets/City/City";
 import axios from "axios";
 import SignIn from "./componets/sign/SignIn";
 import SignUp from "./componets/sign/SignUp";
+import LoggingOut from "./componets/logOut/LoggingOut";
+import TravelPlans from "./componets/TravelPlans/TravelPlans";
+import NewPlan from "./componets/TravelPlans/NewPlan";
+import Image from "./componets/Images/Image";
 class App extends Component {
   constructor() {
     super();
     this.state = {
       searchCity: "",
       continent: "",
+      LoggedUser: null,
     };
     axios.get("http://localhost:4000").then((RESULT) => {
       this.setState({ citiesInfo: RESULT.data });
@@ -19,6 +24,7 @@ class App extends Component {
   }
   componentDidMount = () => {
     this.setState({ searchCity: "", continent: "" });
+    this.loggedUser();
   };
   filterCities = (searchInput) => {
     if (searchInput) {
@@ -59,10 +65,37 @@ class App extends Component {
     }
   }
   SignIn = (userName, password) => {
-    console.log(userName, password);
+    let user = { userName: userName, Password: password };
+    return axios.post("http://localhost:4000/signIn", user);
   };
   SignUp = (userName, country, email, password) => {
-    console.log(userName, password, country, email);
+    return axios.post("http://localhost:4000/signUp", {
+      userName: userName,
+      country: country,
+      email: email,
+      Password: password,
+    });
+  };
+  loggedUser = () => {
+    axios.get("http://localhost:4000/loggedUser").then((RESULT) => {
+      if (!RESULT.data.err) {
+        this.setState({ LoggedUser: RESULT.data });
+      } else {
+        this.setState({ LoggedUser: null });
+      }
+    });
+  };
+  logOut = () => {
+    axios.get("http://localhost:4000/logOut").then(() => {
+      this.loggedUser();
+    });
+  };
+  UploadToTheUserPlans = (a, b, c) => {
+    return axios.post("http://localhost:4000/addToUserPlans", {
+      startDate: a,
+      endDate: b,
+      cities: c,
+    });
   };
   render() {
     return (
@@ -81,6 +114,7 @@ class App extends Component {
                         searchCity={this.state.searchCity}
                         filteredCities={this.filterCities}
                         filterContinent={this.filterContinent}
+                        LoggedUser={this.state.LoggedUser}
                       />
                     )}
                   />
@@ -93,6 +127,7 @@ class App extends Component {
                           match={match}
                           specificCity={this.specificCity}
                           pickedCity={this.state.pickedCity}
+                          LoggedUser={this.state.LoggedUser}
                         />
                       );
                     }}
@@ -103,17 +138,56 @@ class App extends Component {
                       path="/logIn"
                       exact
                       render={() => {
-                        return <SignIn SignIn={this.SignIn} />;
+                        return (
+                          <SignIn
+                            loggedUser={this.loggedUser}
+                            SignIn={this.SignIn}
+                          />
+                        );
                       }}
                     ></Route>
                     <Route
                       path="/SignUp"
                       exact
                       render={() => {
-                        return <SignUp SignUp={this.SignUp} />;
+                        return (
+                          <SignUp
+                            loggedUser={this.loggedUser}
+                            SignUp={this.SignUp}
+                          />
+                        );
                       }}
                     ></Route>
+                    <Route
+                      path="/logOut"
+                      exact
+                      render={() => {
+                        return <LoggingOut logOut={this.logOut} />;
+                      }}
+                    ></Route>
+                    <Route
+                      path="/Plans"
+                      render={() => {
+                        return <TravelPlans />;
+                      }}
+                    />
                   </div>
+                  <Route
+                    path="/creatPlan"
+                    render={() => {
+                      return (
+                        <div>
+                          <NewPlan
+                            LoggedUser={this.state.LoggedUser}
+                            filteredCities={this.filterCities}
+                            filterContinent={this.filterContinent}
+                            Images={this.state.citiesInfo}
+                            UploadToTheUserPlans={this.UploadToTheUserPlans}
+                          />
+                        </div>
+                      );
+                    }}
+                  ></Route>
                 </div>
               </Router>
             }

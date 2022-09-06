@@ -4,6 +4,10 @@ const bodyParser = require("body-parser");
 const axios = require("axios");
 const mongoose = require("mongoose");
 const allCities = require("./database");
+const Users = require("./usersDB");
+const session = require("express-session");
+const { request, response } = require("express");
+const { populate } = require("./database");
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mydb", {
   useNewUrlParser: true,
 });
@@ -19,101 +23,79 @@ server.use(function (req, res, next) {
 
   next();
 });
-
-//server.use(listOfCitiesImages, listOfCitiesDetails, hookData, saveToDataBase);
+server.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60, sameSite: true, secure: false },
+  })
+);
+let Sesstion = null;
 const PORT = 4000;
-let names = [];
-
-const listOfCitiesImages = async function (request, response, next) {
-  await axios.get("https://api.teleport.org/api/urban_areas").then((result) => {
-    result.data._links["ua:item"].map((city, index) => {
-      if (index != 92) {
-        names.push(
-          city.name
-            .toLowerCase()
-            .replaceAll(" ", "-")
-            .replaceAll(".", "")
-            .replaceAll(",", "")
-        );
-      }
+server.post("/getCities", async (request, response) => {
+  let Cities = [];
+  for (i = 0; i < request.body.length; i++) {
+    allCities.find({ _id: request.body[i] }).exec((_err, result) => {
+      Cities.push(result[0]);
     });
-  });
-
-  let NamesOfCites = names.map((city, index) => {
-    return `https://api.teleport.org/api/urban_areas/slug:${city}/images`;
-  });
-  imagesURL = [];
-  promises = [];
-  for (let i = 0; i < names.length; i++) {
-    promises.push(axios.get(NamesOfCites[i]));
   }
-  Promise.all(promises)
-    .then((result) => {
-      imagesURL = result;
-      request.URLS = imagesURL.map((img) => {
-        return img.data.photos[0].image.mobile;
-      });
-      console.log("Image middleware done");
-      next();
-    })
-    .catch((err) => {
-      console.log(err);
+
+  setTimeout(() => {
+    response.send(Cities);
+  }, 500);
+});
+server.post("/addToUserPlans", (request, response) => {
+  let Places = [];
+  request.body.cities.forEach((city) => {
+    Places.push(city);
+  });
+  Sesstion.Plans.push({
+    PlanDate: {
+      startDate: request.body.startDate,
+      endDate: request.body.endDate,
+    },
+    Places: Places,
+  });
+  Sesstion.save();
+  response.end();
+});
+
+server.get("/loggedUser", (request, response) => {
+  if (Sesstion) {
+    response.send(Sesstion);
+  } else {
+    response.send({ err: "Not logged yet" });
+  }
+});
+server.get("/logOut", (request, response) => {
+  Sesstion = null;
+  response.end("data");
+});
+server.post("/signUp", (request, response) => {
+  axios.get("https://randomuser.me/api/").then((Pincture) => {
+    Sesstion = new Users({
+      userName: request.body.userName,
+      country: request.body.country,
+      Email: request.body.email,
+      Password: request.body.Password,
+      Plans: [],
+      picture: Pincture.data.results[0].picture.large,
     });
-};
-const listOfCitiesDetails = async (request, response, next) => {
-  let details = [];
-  let promises = [];
-  for (let i = 0; i < names.length; i++) {
-    promises.push(
-      axios.get(`https://api.teleport.org/api/urban_areas/slug:${names[i]}/`)
-    );
-  }
-  details = await Promise.all(promises);
-  request.details = details.map((data) => {
-    return {
-      continent: data.data.continent,
-      FullName: data.data.full_name,
-      mayor: data.data.mayor,
-      boundingBox: data.data.bounding_box.latlon,
-    };
+    Sesstion.save();
+    response.send(Sesstion);
   });
-  console.log("details middleware done");
-  next();
-};
-const hookData = function (request, response, next) {
-  request.Final = [];
-  console.log(request.URLS.length + " request.URLS.length");
-  console.log(request.details.length + " request.details.length");
-  for (i = 0; i < names.length; i++) {
-    request.Final[i] = {
-      CityimageSrc: request.URLS[i],
-      CityDetails: request.details[i],
-    };
-  }
-  next();
-};
-const saveToDataBase = function (request, response, next) {
-  console.log(request.Final.length + " request.Final.length");
-  for (let i = 0; i < request.Final.length; i++) {
-    new allCities({
-      CityimageSrc: request.Final[i].CityimageSrc,
-      CityDetails: {
-        continent: request.Final[i].CityDetails.continent,
-        FullName: request.Final[i].CityDetails.FullName,
-        mayor: request.Final[i].CityDetails.mayor,
-        boundingBox: {
-          east: request.Final[i].CityDetails.boundingBox.east,
-          north: request.Final[i].CityDetails.boundingBox.north,
-          south: request.Final[i].CityDetails.boundingBox.south,
-          west: request.Final[i].CityDetails.boundingBox.west,
-        },
-      },
-    }).save();
-  }
-  console.log("saved in dataBase");
-  next();
-};
-
+});
+server.post("/signIn", (request, response) => {
+  Users.find(request.body).exec((err, result) => {
+    if (result[0]) {
+      Sesstion = result[0];
+      response.send(Sesstion);
+    } else {
+      response.send({ err: "user not found" });
+    }
+  });
+});
 server.get("/", (request, response) => {
   allCities.find({}).exec(function (error, result) {
     response.send(result);
@@ -161,7 +143,6 @@ server.get("/country/:country", (request, response) => {
       }
     });
 });
-
 server.listen(PORT, () => {
   console.log("server start listining");
 });

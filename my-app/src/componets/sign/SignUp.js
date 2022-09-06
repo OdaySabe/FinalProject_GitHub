@@ -29,13 +29,17 @@ class SignIn extends Component {
     this.setState({ password: event.target.value });
   };
   SignUp = () => {
-    this.props.SignUp(
-      this.state.userName,
-      this.state.country,
-      this.state.email,
-      this.state.password
-    );
-    this.setState({ redirect: true });
+    this.props
+      .SignUp(
+        this.state.userName,
+        this.state.country,
+        this.state.email,
+        this.state.password
+      )
+      .then((RESULT) => {
+        this.props.loggedUser();
+        this.setState({ redirect: true });
+      });
   };
   render() {
     if (this.state.redirect) {

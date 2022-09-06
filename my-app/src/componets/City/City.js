@@ -12,6 +12,13 @@ export default class City extends Component {
       const data = this.props.pickedCity.data[0];
       return (
         <div className="CityInDetails">
+          {this.props.LoggedUser ? (
+            <div className="userInfo">
+              <img className="image" src={this.props.LoggedUser.picture}></img>
+            </div>
+          ) : (
+            <div></div>
+          )}
           <h1>City of {this.props.match.params.cityName}</h1>
           <h3>Placed in continent of : {data.CityDetails.continent}</h3>
           <img src={data.CityimageSrc} />
