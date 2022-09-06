@@ -12,9 +12,7 @@ export default class TravelPlans extends Component {
   componentDidMount = () => {
     axios.get("http://localhost:4000/loggedUser").then((RESULT) => {
       this.setState({ LoggedUser: RESULT.data }, () => {
-        this.setState({ Plans: this.state.LoggedUser.Plans }, () => {
-          console.log(this.state.Plans);
-        });
+        this.setState({ Plans: this.state.LoggedUser.Plans });
       });
     });
   };
@@ -31,8 +29,13 @@ export default class TravelPlans extends Component {
         {this.state.Plans ? (
           <div>
             {this.state.Plans.map((plan) => {
+              console.log(plan);
               return (
-                <DisplayPlan Places={plan.Places} PlanDate={plan.PlanDate} />
+                <DisplayPlan
+                  id={plan._id}
+                  Places={plan.Places}
+                  PlanDate={plan.PlanDate}
+                />
               );
             })}{" "}
           </div>

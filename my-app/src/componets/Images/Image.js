@@ -8,6 +8,7 @@ export default class Image extends Component {
       selectedImages: [],
     };
   }
+
   addASelectedImage = (ImageId) => {
     let temp = [...this.state.selectedImages];
     temp.push(ImageId);
@@ -15,63 +16,86 @@ export default class Image extends Component {
       this.props.cities(this.state.selectedImages);
     });
   };
-  render() {
-    return !this.props.LoggedUser ? (
-      <div className="citiesContainer">
-        {this.props.Images.map((singleCity) => {
-          return (
-            <SingleImage
-              detals={singleCity.CityDetails}
-              imgSRC={singleCity.CityimageSrc}
-              deleteImage={this.deleteImage}
-            />
-          );
-        })}
-      </div>
-    ) : (
-      <div>
-        <hr></hr>
-        <h1>Your Selected Cities</h1>
-        <div className="selectedCites">
-          {this.props.Images.map((singleCity) => {
-            {
-              return this.state.selectedImages.map((id) => {
-                if (id == singleCity._id) {
-                  return (
-                    <SingleImage
-                      detals={singleCity.CityDetails}
-                      imgSRC={singleCity.CityimageSrc}
-                      noLink={true}
-                    />
-                  );
-                }
-              });
-            }
-          })}
+  removeCity = (imageName) => {
+    let temp = [...this.state.selectedImages];
+    for (let i = 0; i < temp.length; i++) {
+      if (temp[i].CityDetails.FullName == imageName) {
+        temp.splice(i, 1);
+      }
+    }
+    console.log(temp, this.state.selectedImages);
+    this.setState({ selectedImages: temp }, () => {
+      this.props.cities(this.state.selectedImages);
+    });
+  };
+  checkIfHavingPlans = () => {
+    if (this.props.LoggedUser && this.state.selectedImages != null) {
+      return (
+        <div>
+          <hr></hr>
+          <h1>Your Selected Cities</h1>
+          <div className="selectedCites">
+            {this.state.selectedImages.map((image) => {
+              return (
+                <div>
+                  <img
+                    className="imageOfSelectedCites"
+                    src={image.CityimageSrc}
+                  />
+                  <p>{image.CityDetails.FullName}</p>
+                  <button
+                    onClick={() => {
+                      this.removeCity(image.CityDetails.FullName);
+                    }}
+                  >
+                    Delete this Image
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+          <hr></hr>
+          <div className="citiesContainerForNewPlan">
+            {this.props.Images.map((singleCity) => {
+              let redFlag = false;
+              {
+                this.state.selectedImages.map((image) => {
+                  if (image._id == singleCity._id) {
+                    redFlag = true;
+                  }
+                });
+              }
+              return (
+                <SingleImage
+                  detals={singleCity.CityDetails}
+                  imgSRC={singleCity.CityimageSrc}
+                  selectedImages={this.state.selectedImages}
+                  addASelectedImage={this.addASelectedImage}
+                  redFlag={redFlag}
+                  removeCity={this.removeCity}
+                />
+              );
+            })}
+          </div>
         </div>
-        <hr></hr>
-        <div className="citiesContainerForNewPlan">
+      );
+    } else {
+      return (
+        <div className="citiesContainer">
           {this.props.Images.map((singleCity) => {
-            let redFlag = false;
-            {
-              this.state.selectedImages.map((id) => {
-                if (id == singleCity._id) {
-                  redFlag = true;
-                }
-              });
-            }
             return (
               <SingleImage
                 detals={singleCity.CityDetails}
                 imgSRC={singleCity.CityimageSrc}
-                LoggedUser={this.props.LoggedUser}
-                addASelectedImage={this.addASelectedImage}
-                redFlag={redFlag}
               />
             );
           })}
         </div>
-      </div>
-    );
+      );
+    }
+  };
+
+  render() {
+    return <div>{this.checkIfHavingPlans()} </div>;
   }
 }

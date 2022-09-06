@@ -6,11 +6,15 @@ export default class SingleImage extends Component {
     axios
       .get(`http://localhost:4000/country/${this.props.detals.FullName}`)
       .then((Result) => {
-        this.props.addASelectedImage(Result.data[0]._id);
+        console.log(Result.data[0]);
+        this.props.addASelectedImage(Result.data[0]);
       });
   };
+  removeCity = () => {
+    this.props.removeCity(this.props.detals.FullName);
+  };
   render() {
-    return this.props.LoggedUser ? (
+    return this.props.selectedImages ? (
       <div className="addToPlans">
         <Link
           to=""
@@ -27,25 +31,22 @@ export default class SingleImage extends Component {
           <button
             className="buttomToAddForPlans"
             style={{ backgroundColor: "red" }}
+            onClick={this.removeCity}
           >
             Alredy Added to this plan
           </button>
         ) : (
-          <button className="buttomToAddForPlans" onClick={this.addCity}>
+          <button
+            className="buttomToAddForPlans"
+            onClick={this.addCity}
+            style={{ backgroundColor: "green" }}
+          >
             add to your plan
           </button>
         )}
       </div>
     ) : (
-      <Link
-        id="ancer"
-        to={"/city/" + this.props.detals.FullName}
-        onClick={(e) => {
-          if (this.props.noLink) {
-            e.preventDefault();
-          }
-        }}
-      >
+      <Link id="ancer" to={"/city/" + this.props.detals.FullName}>
         <div className="city">
           <img className="cityImage" src={this.props.imgSRC} />
           <p>{this.props.detals.FullName}</p>

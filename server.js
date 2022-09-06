@@ -33,6 +33,7 @@ server.use(
 );
 let Sesstion = null;
 const PORT = 4000;
+
 server.post("/getCities", async (request, response) => {
   let Cities = [];
   for (i = 0; i < request.body.length; i++) {
@@ -45,6 +46,7 @@ server.post("/getCities", async (request, response) => {
     response.send(Cities);
   }, 500);
 });
+
 server.post("/addToUserPlans", (request, response) => {
   let Places = [];
   request.body.cities.forEach((city) => {
@@ -60,7 +62,6 @@ server.post("/addToUserPlans", (request, response) => {
   Sesstion.save();
   response.end();
 });
-
 server.get("/loggedUser", (request, response) => {
   if (Sesstion) {
     response.send(Sesstion);
