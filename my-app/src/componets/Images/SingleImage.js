@@ -6,7 +6,6 @@ export default class SingleImage extends Component {
     axios
       .get(`http://localhost:4000/country/${this.props.detals.FullName}`)
       .then((Result) => {
-        console.log(Result.data[0]);
         this.props.addASelectedImage(Result.data[0]);
       });
   };

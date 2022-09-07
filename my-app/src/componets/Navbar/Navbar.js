@@ -42,7 +42,6 @@ export default class Navbar extends Component {
     );
   };
   displayUserLoggedOrNot = () => {
-    console.log(this.props.LoggedUser);
     if (!this.props.LoggedUser) {
       return (
         <div className="nav">
@@ -62,10 +61,14 @@ export default class Navbar extends Component {
           <NavLink to="/Plans" activeStyle className="logo">
             <span>{this.props.LoggedUser.userName}</span> Travel plans
           </NavLink>
+
           <div className="userInfo">
             <img className="image" src={this.props.LoggedUser.picture}></img>
             <span>{this.props.LoggedUser.userName}</span>
             <p>{this.props.LoggedUser.Email}</p>
+            <NavLink to="/listOfUsers" className="logo">
+              Other Users
+            </NavLink>
           </div>
         </div>
       );

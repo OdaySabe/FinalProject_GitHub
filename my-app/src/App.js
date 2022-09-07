@@ -9,7 +9,9 @@ import SignUp from "./componets/sign/SignUp";
 import LoggingOut from "./componets/logOut/LoggingOut";
 import TravelPlans from "./componets/TravelPlans/TravelPlans";
 import NewPlan from "./componets/TravelPlans/NewPlan";
-import Image from "./componets/Images/Image";
+import ListOfUsers from "./componets/ListOfUsers/ListOfUsers";
+import UserPage from "./componets/ListOfUsers/UserPage";
+
 class App extends Component {
   constructor() {
     super();
@@ -186,6 +188,19 @@ class App extends Component {
                           />
                         </div>
                       );
+                    }}
+                  ></Route>
+                  <Route
+                    path="/listOfUsers"
+                    exact
+                    render={() => {
+                      return <ListOfUsers />;
+                    }}
+                  ></Route>
+                  <Route
+                    path="/UserPage/:userId"
+                    render={(match) => {
+                      return <UserPage match={match} />;
                     }}
                   ></Route>
                 </div>

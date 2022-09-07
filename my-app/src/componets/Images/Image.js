@@ -23,7 +23,7 @@ export default class Image extends Component {
         temp.splice(i, 1);
       }
     }
-    console.log(temp, this.state.selectedImages);
+
     this.setState({ selectedImages: temp }, () => {
       this.props.cities(this.state.selectedImages);
     });
@@ -54,6 +54,7 @@ export default class Image extends Component {
               );
             })}
           </div>
+
           <hr></hr>
           <div className="citiesContainerForNewPlan">
             {this.props.Images.map((singleCity) => {

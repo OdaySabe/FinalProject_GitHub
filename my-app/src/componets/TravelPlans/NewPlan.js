@@ -22,6 +22,7 @@ export default class NewPlan extends Component {
   filterContinent = (e) => {
     this.props.filterContinent(e.target.value);
   };
+
   UploadToTheUserPlans = () => {
     if (
       this.state.endDate &&
@@ -47,7 +48,6 @@ export default class NewPlan extends Component {
       <Redirect to="Plans" />
     ) : (
       <div>
-        {console.log()}
         <div className="newPlan">
           <div>
             <img className="image" src={this.props.LoggedUser.picture}></img>

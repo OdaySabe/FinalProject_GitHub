@@ -34,6 +34,52 @@ server.use(
 let Sesstion = null;
 const PORT = 4000;
 
+server.post("/PlanJoin", (request, response) => {
+  Users.findById(request.body.userId).exec((err, result) => {
+    result.Plans.forEach((plan) => {
+      if (plan._id == request.body.planId) {
+        let NewJoint = {
+          _id: Sesstion._id,
+          userName: Sesstion.userName,
+          picture: Sesstion.picture,
+        };
+        let push = true;
+        plan.friends.forEach((friend) => {
+          if (friend._id + "" == NewJoint._id + "") {
+            push = false;
+          }
+        });
+        if (push == true) {
+          plan.friends.push(NewJoint);
+          result.save();
+          response.send(result);
+        } else {
+          response.send({ err: "Already Joined" });
+        }
+      }
+    });
+  });
+});
+
+server.get("/UserProfile/:userID", (request, response) => {
+  Users.findById(request.params.userID).exec((err, result) => {
+    if (!result || err) {
+      response.send({ err: "user can not be found" });
+    } else {
+      response.send(result);
+    }
+  });
+});
+
+server.get("/allSiteUsers", (request, response) => {
+  Users.find({ _id: { $ne: Sesstion._id } }).exec((err, result) => {
+    if (err || !result) {
+      response.send({ err: "no users yet for this site" });
+    } else {
+      response.send(result);
+    }
+  });
+});
 server.post("/getCities", async (request, response) => {
   let Cities = [];
   for (i = 0; i < request.body.length; i++) {
@@ -41,7 +87,6 @@ server.post("/getCities", async (request, response) => {
       Cities.push(result[0]);
     });
   }
-
   setTimeout(() => {
     response.send(Cities);
   }, 500);

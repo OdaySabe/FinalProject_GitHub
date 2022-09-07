@@ -21,24 +21,24 @@ export default class LoggingOut extends Component {
     return this.state.redirect ? (
       <Redirect to="/" />
     ) : (
-      <div>
-        <h1>
-          Are you sure you want to log out ?
-          <button
-            onClick={(event) => {
-              this.leaveOrStay(true);
-            }}
-          >
-            yes
-          </button>
-          <button
-            onClick={(event) => {
-              this.leaveOrStay(false);
-            }}
-          >
-            no
-          </button>
-        </h1>
+      <div className="noPlans">
+        <h1>Are you sure you want to log out ?</h1>
+        <button
+          className="Join"
+          onClick={(event) => {
+            this.leaveOrStay(true);
+          }}
+        >
+          I Want to Logout
+        </button>
+        <button
+          className="Join"
+          onClick={(event) => {
+            this.leaveOrStay(false);
+          }}
+        >
+          I will stay
+        </button>
       </div>
     );
   }
