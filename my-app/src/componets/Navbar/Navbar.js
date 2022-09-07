@@ -55,20 +55,19 @@ export default class Navbar extends Component {
       return (
         <div className="nav">
           <NavLink to="/logOut" activeStyle className="logo">
-            LogOut
+            Log out
           </NavLink>
           {this.renderSelectors()}
           <NavLink to="/Plans" activeStyle className="logo">
-            <span>{this.props.LoggedUser.userName}</span> Travel plans
+            My Profile
           </NavLink>
-
+          <NavLink to="/listOfUsers" className="logo">
+            WebSite users
+          </NavLink>
           <div className="userInfo">
             <img className="image" src={this.props.LoggedUser.picture}></img>
-            <span>{this.props.LoggedUser.userName}</span>
+            <p>{this.props.LoggedUser.userName}</p>
             <p>{this.props.LoggedUser.Email}</p>
-            <NavLink to="/listOfUsers" className="logo">
-              Other Users
-            </NavLink>
           </div>
         </div>
       );

@@ -50,22 +50,24 @@
   box-shadow: 0px 0px 10px 10px lightblue;
   border-radius: 1%;
 }
+
 .addToPlans{
-  background-color: #61dafb;
-  box-shadow: 0px 0px 10px 10px lightblue;
-  border-radius: 10%;
-  padding: 10px;
+  background-color: #DFE3E3;
+  box-shadow: 0px 0px 5px 5px #b1b6b6;
+
+  padding: 20px;
   display: grid;
   grid-template-rows: 2fr 0.5fr 0.1fr;
   text-align: center;
 }
+
 .buttomToAddForPlans{
-  height: 60px;
-  border-radius: 20%;
+  height: 40px;
   background-color: rgb(195, 225, 235);
   border: 0px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   box-shadow: 0px 0px 5px 5px gray;
+  
 }
 .addToPlans>a{
   text-decoration: none;
@@ -74,8 +76,9 @@
   width: 100%;
   height: 100%;
   border-radius: 30%;
-  box-shadow: 0px 0px 10px 10px rgb(184, 177, 177);
+  box-shadow: 0px 0px 5px 5px #967E76;
 }
+
 .city{
    display: grid;
    grid-template-rows: repeat(1,0.1fr);
@@ -98,20 +101,26 @@
 .nav{
   display: grid;
   position: relative;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 4fr 1fr;
   grid-template-areas: 
     'b b';
   background-color: rgb(135, 204, 227);
   padding: 20px;
   margin-bottom: 10px;
-  box-shadow: 7px 7px 5px lightblue
-
+  box-shadow: 7px 7px 5px lightblue;
+  
+  
+}
+.nav>a{
+  text-decoration: none;
+  font-size: large;
 }
 .userInfo{
   position: absolute;
   right: 30px;
-  font-size: large;
+  font-size: x-small;
   color: rgb(58, 52, 52);
+  height: 100px;
 }
 .userInfo>*{
   margin: 3px;
@@ -122,6 +131,7 @@
   border-radius: 100%;
   box-shadow: 0px 0px 10px 10px rgb(96, 149, 166);
   float: left;
+  margin: 20px;
   
 }
 
@@ -160,13 +170,13 @@ padding: 10px;
 
 .inputs{
   display: grid;
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(1,1fr);
   grid-gap: 30px;
 }
 
 .search{
-  width: 100%;
-  height: 100%;
+  width: fit-content;
+  height: fit-content;
   box-shadow: 7px 7px 5px rgb(19, 165, 214);
   font-size: x-large;
   color:#607F94;
@@ -235,23 +245,68 @@ button:hover {
 .selectedCites{
   display: grid;
   grid-template-columns: repeat(6,1fr);
-  grid-gap: 10px;
+  grid-gap: 20px;
+  text-align: center;
+  font-size: smaller;
+}
+.selectedCites>div{
+  background-color: #75c6e1;
+  padding: 10px;
+  box-shadow: 0px 0px 5px 5px greenyellow;
 }
 .imageOfSelectedCites{
   width: 100px;
   height: 100px;
+  border-radius: 10%;
+  box-shadow: 0px 0px 3px 3px black;
 }
+.deleteTheImage{
+  background-color: #FF0000;
+  padding: 3px;
+  box-shadow: 0px 0px 5px 5px #FF0000;
+  border: none;
+  margin: 5px;
+}
+
 .newPlan{
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background-color: #61dafb;
+  background-color: #75C6E1;
   box-shadow: 7px 7px 5px rgb(186, 200, 235);
   padding: 10px;
+  color: white;
 }
 .newPlanInputs{
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-content: end;
+ 
+}
+label{
+  margin: 10px;
+}
+
+.K{
+  text-align: center;
+  height: 40px;
+  background-color: #DFE3E3;
+  padding: 20px;
+  box-shadow: 0px 0px 10px 10px rgb(197, 204, 242);
+  
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: #e38484;
+  text-decoration: none;
+    font-size: xx-large;
+}
+.newPlanInputs>button{
+  background-color: #a2ebeb;
+  padding: 10px;
+  box-shadow: 0px 0px 5px 5px #b7e0e0;
+  border: none;
+  margin: 5px;
+  color: rgb(54, 52, 52);
+  font-size: medium;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 .newPlanInputs>input,select{
   height: 30%;
@@ -266,6 +321,7 @@ button:hover {
   border: 1px solid black;
   padding: 10px;
 }
+
 .planImages{
   display: grid;
   grid-template-columns: repeat(3,1fr);
@@ -372,6 +428,7 @@ button:hover {
   border-radius: 100%;
   box-shadow: 0px 0px 3px 3px #86c6db ;
 }
+
 .noPlans{
 margin: 20px;
 text-align: center;
@@ -383,4 +440,27 @@ box-shadow: 0px 0px 10px 10px rgb(197, 204, 242);
 font-size: smaller;
 font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 color: #e38484;
+text-decoration: none;
+  font-size: small;
 }
+
+.UserProfile{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  background-color: #75c6e1;
+  box-shadow:  0px 5px 5px #86c6db ;
+  padding: 2%;
+  color: white;
+  
+}
+.userProfileLinks{
+  display: grid;
+  text-align: end;
+  
+}
+.userProfileLinks>a{
+  text-decoration: none;
+  color: white;
+}
+
+

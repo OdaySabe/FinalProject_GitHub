@@ -19,28 +19,35 @@ export default class TravelPlans extends Component {
 
   render() {
     return this.state.LoggedUser ? (
-      <div className="userDetalsPlans">
-        <Link to="/">return Home Page</Link>
-        <h1>TravelPlans of {this.state.LoggedUser.userName}</h1>
-        <img src={this.state.LoggedUser.picture} />
-        <h2>{this.state.LoggedUser.Email}</h2>
-        <h2>{this.state.LoggedUser.country}</h2>
-        <Link to="/creatPlan">add new Plan</Link>
-        {this.state.Plans ? (
+      <div>
+        <div className="UserProfile">
           <div>
-            {this.state.Plans.map((plan) => {
-              console.log(plan);
-              return (
-                <DisplayPlan
-                  id={plan._id}
-                  Places={plan.Places}
-                  PlanDate={plan.PlanDate}
-                />
-              );
-            })}{" "}
+            <img className="image" src={this.state.LoggedUser.picture} />
+            <h3>{this.state.LoggedUser.userName} Profile</h3>
+            <h3>{this.state.LoggedUser.Email}</h3>
+            <h3>Living in {this.state.LoggedUser.country}</h3>
+          </div>
+          <div className="userProfileLinks">
+            <Link to="/">return Home Page</Link>
+            <Link to="/creatPlan">add new Plan</Link>
+            <Link to="/joinedplans">Plans joined</Link>
+          </div>
+        </div>
+
+        {this.state.LoggedUser.Plans.length > 0 ? (
+          <div>
+            <h1 className="K">My Plans</h1>
+            {this.state.LoggedUser.Plans.map((plan) => {
+              return <DisplayPlan EachPlan={plan} />;
+            })}
           </div>
         ) : (
-          <h1>user have no planse yet</h1>
+          <div
+            className="noPlans"
+            style={{ fontSize: "large", height: "fit-content" }}
+          >
+            user have no planse yet
+          </div>
         )}
       </div>
     ) : (

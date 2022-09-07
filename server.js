@@ -34,6 +34,25 @@ server.use(
 let Sesstion = null;
 const PORT = 4000;
 
+server.get("/SesstionJoinedPlans", (request, response) => {
+  let listOfJoinedPlans = [];
+  let res = {};
+  console.log(Sesstion);
+  Users.find({ _id: { $ne: Sesstion._id } }).exec((err, result) => {
+    result.forEach((user) => {
+      user.Plans.forEach((plan) => {
+        plan.friends.forEach((friend) => {
+          if (friend._id + "" == Sesstion._id + "") {
+            listOfJoinedPlans.push({ userImage: user.picture, plan: plan });
+          }
+        });
+      });
+    });
+
+    response.send(listOfJoinedPlans);
+  });
+});
+
 server.post("/PlanJoin", (request, response) => {
   Users.findById(request.body.userId).exec((err, result) => {
     result.Plans.forEach((plan) => {

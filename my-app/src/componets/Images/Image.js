@@ -44,11 +44,12 @@ export default class Image extends Component {
                   />
                   <p>{image.CityDetails.FullName}</p>
                   <button
+                    className="deleteTheImage"
                     onClick={() => {
                       this.removeCity(image.CityDetails.FullName);
                     }}
                   >
-                    Delete this Image
+                    Delete
                   </button>
                 </div>
               );

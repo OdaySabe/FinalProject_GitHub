@@ -11,6 +11,7 @@ import TravelPlans from "./componets/TravelPlans/TravelPlans";
 import NewPlan from "./componets/TravelPlans/NewPlan";
 import ListOfUsers from "./componets/ListOfUsers/ListOfUsers";
 import UserPage from "./componets/ListOfUsers/UserPage";
+import Joined from "./componets/TravelPlans/Joined";
 
 class App extends Component {
   constructor() {
@@ -199,8 +200,23 @@ class App extends Component {
                   ></Route>
                   <Route
                     path="/UserPage/:userId"
+                    exact
                     render={(match) => {
                       return <UserPage match={match} />;
+                    }}
+                  ></Route>
+                  <Route
+                    path="/seeMore/:userId"
+                    exact
+                    render={(match) => {
+                      return <UserPage match={match} noBack={true} />;
+                    }}
+                  ></Route>
+                  <Route
+                    path="/joinedplans"
+                    exact
+                    render={() => {
+                      return <Joined loggedUser={this.state.LoggedUser} />;
                     }}
                   ></Route>
                 </div>

@@ -110,7 +110,7 @@ export default class NewPlan extends Component {
               {moment(this.state.endDate).format("MM/DD/YYYY")}
               {this.state.startDate && this.state.endDate ? (
                 <h3>
-                  Total Days
+                  Total Days{" "}
                   {moment(this.state.endDate).format("DD") -
                     moment(this.state.startDate).format("DD")}{" "}
                 </h3>

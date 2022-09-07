@@ -1,7 +1,7 @@
 import { Component } from "react";
 import axios from "axios";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 export default class UserPage extends Component {
   constructor() {
     super();
@@ -86,9 +86,15 @@ export default class UserPage extends Component {
     return (
       <div className="HomeUser">
         <div className="userInfo">
-          <Link className="noPlans" to="/listOfUsers">
-            Go Back
-          </Link>
+          {!this.props.noBack ? (
+            <Link className="noPlans" to="/listOfUsers">
+              Go Back
+            </Link>
+          ) : (
+            <Link className="noPlans" to="/Plans">
+              Retrun
+            </Link>
+          )}
           <img className="UserPicture" src={this.state.user.picture} />
         </div>
         {this.state.user.Plans.length != 0 ? (

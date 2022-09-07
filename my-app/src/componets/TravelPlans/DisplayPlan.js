@@ -1,12 +1,21 @@
 import axios from "axios";
 import { Component } from "react";
 import moment, { months } from "moment";
+import { Link } from "react-router-dom";
 
 export default class DisplayPlan extends Component {
   constructor() {
     super();
     this.state = {};
   }
+  renderPlaces = (singleCity) => {
+    return (
+      <div>
+        <img className="userPageImage" src={singleCity.CityimageSrc} />
+        <p>{singleCity.CityDetails.FullName}</p>
+      </div>
+    );
+  };
   calcuateDays = () => {
     const days =
       moment(this.props.PlanDate.endDate).format("DD") -
@@ -19,35 +28,39 @@ export default class DisplayPlan extends Component {
       moment(this.props.PlanDate.startDate).format("YYYY");
     return <h3>Days : {days + 30 * months + 360 * years}</h3>;
   };
-  componentDidMount = () => {
-    axios
-      .post("http://localhost:4000/getCities", this.props.Places)
-      .then((RESULT) => {
-        this.setState({ planData: RESULT.data });
-      });
-  };
+
   render() {
-    return this.state.planData ? (
-      <div className="planSector">
-        <span>
-          start date :{" "}
-          {moment(this.props.PlanDate.startDate).format("YYYY-MM-DD")}
-        </span>
-        <span>
-          end date :{moment(this.props.PlanDate.endDate).format("YYYY-MM-DD")}
-        </span>
-        <span>Length of the trip :{this.calcuateDays()}</span>
-        <h1>Cities to visit</h1>
-        <div>
-          {this.state.planData.map((singleImage) => {
+    return this.props.EachPlan ? (
+      <div className="userPlansInfo">
+        <h3>
+          Start at :
+          {moment(this.props.EachPlan.PlanDate.startDate).format("YYYY/MM/DD")}
+        </h3>
+        <h3>
+          End at :
+          {moment(this.props.EachPlan.PlanDate.endDate).format("YYYY/MM/DD")}
+        </h3>
+        <h3>
+          Total of{" "}
+          {moment(this.props.EachPlan.PlanDate.endDate).format("DD") -
+            moment(this.props.EachPlan.PlanDate.startDate).format("DD")}{" "}
+          Days
+        </h3>
+        <p>
+          total of <strong>({this.props.EachPlan.Places.length})</strong> Cities{" "}
+        </p>
+        <div className="UserPlanCities">
+          {this.props.EachPlan.Places.map((city) => {
+            return this.renderPlaces(city);
+          })}
+        </div>
+        <span></span>
+        <div className="listOfJoiners">
+          {this.props.EachPlan.friends.map((friend) => {
             return (
-              <div className="planImages">
-                <h3>{singleImage.CityDetails.FullName}</h3>
-                <img
-                  className="planImagesPicture"
-                  src={singleImage.CityimageSrc}
-                ></img>
-              </div>
+              <Link to={"/seeMore/" + friend._id}>
+                <img className="Joiner" src={friend.picture} />
+              </Link>
             );
           })}
         </div>
