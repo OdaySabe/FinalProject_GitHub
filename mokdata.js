@@ -1,5 +1,10 @@
+const axios = require("axios");
+
+const allCities = require("./database");
+
 let names = [];
 const listOfCitiesImages = async function (request, response, next) {
+  console.log("yes");
   await axios.get("https://api.teleport.org/api/urban_areas").then((result) => {
     result.data._links["ua:item"].map((city, index) => {
       if (index != 92) {
@@ -83,15 +88,16 @@ const saveToDataBase = function (request, response, next) {
           west: request.Final[i].CityDetails.boundingBox.west,
         },
       },
-    }).save();
+    });
   }
   console.log("saved in dataBase");
   next();
 };
 
-(module.exports = names),
+module.exports = {
   listOfCitiesImages,
   listOfCitiesDetails,
   hookData,
-  saveToDataBase;
-//server.use(listOfCitiesImages, listOfCitiesDetails, hookData, saveToDataBase);
+  saveToDataBase,
+  names,
+};

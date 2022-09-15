@@ -8,6 +8,12 @@ const Users = require("./usersDB");
 const session = require("express-session");
 const { request, response } = require("express");
 const { populate } = require("./database");
+const functions = require("./mokdata");
+const names = functions.names;
+const hookData = functions.hookData;
+const listOfCitiesDetails = functions.listOfCitiesImages;
+const listOfCitiesImages = functions.listOfCitiesImages;
+const saveToDataBase = functions.saveToDataBase;
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mydb", {
   useNewUrlParser: true,
 });
@@ -31,12 +37,21 @@ server.use(
     cookie: { maxAge: 1000 * 60 * 60, sameSite: true, secure: false },
   })
 );
+allCities.find({}).exec((error, result) => {
+  if (result.length == 0) {
+    server.use(
+      listOfCitiesImages,
+      listOfCitiesDetails,
+      hookData,
+      saveToDataBase
+    );
+  }
+});
 let Sesstion = null;
 const PORT = 4000;
 
 server.get("/SesstionJoinedPlans", (request, response) => {
   let listOfJoinedPlans = [];
-  let res = {};
   console.log(Sesstion);
   Users.find({ _id: { $ne: Sesstion._id } }).exec((err, result) => {
     result.forEach((user) => {
@@ -48,7 +63,6 @@ server.get("/SesstionJoinedPlans", (request, response) => {
         });
       });
     });
-
     response.send(listOfJoinedPlans);
   });
 });
